@@ -1,0 +1,67 @@
+
+name: teamcity workflow
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  APP_ENV: testing
+  name: staging
+  VERSION: 1.0.0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get code
+        uses: actions/checkout@v3
+
+      - name: check html files
+        run: |
+          echo "Build started!"
+          ls -la
+          echo "index.html found!"
+          cat index.html
+
+      - name: check
+        run: echo "this is build in the teamcity"
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: get code
+        uses: actions/checkout@v3
+
+      - name: Validate HTML and Print Params
+        run: |
+          echo "Running Test & Validation Build"
+          echo "Environment  : ${{ env.name }}"
+          echo "Version      : ${{ env.VERSION }}"
+          echo "App Env      : $APP_ENV"
+          echo ""
+          echo "Checking HTML file exists"
+          if [ -f index.html ]; then
+            echo "index.html found!"
+          else
+            echo "index.html MISSING - Build Failed!"
+            exit 1
+          fi
+          echo ""
+          echo "Checking HTML has required tags"
+          if grep -q "<html" index.html; then
+            echo "<html> tag found!"
+          else
+            echo "Missing <html> tag!"
+            exit 1
+          fi
+          if grep -q "<body" index.html; then
+            echo "<body> tag found!"
+          else
+            echo "Missing <body> tag!"
+            exit 1
+          fi
+          echo ""
+          echo "All validations passed!"
