@@ -1,0 +1,40 @@
+name: test
+on:
+  push:
+jobs:
+  test:
+    needs: build
+    runs-on: ubuntu-22.04
+    steps:
+      - name: check out code
+        uses: actions/checkout@v3
+      - name: validate html and print params"
+        run: |
+          echo "running test and validation build"
+           echo "Environment  : %env.name%"
+           echo "Version      : %system.version%"
+           echo "App Env      : ${'$'}APP_ENV"
+       - name: checking html files
+        run: |
+         if [ -f index.html ]; then
+                  echo "index.html found!"
+                else
+                  echo "index.html MISSING - Build Failed!"
+                  exit 1
+                fi
+        - name: checking html tags
+          run: |
+            if grep -q "<html" index.html; then
+                  echo "<html> tag found!"
+                else
+                  echo "Missing <html> tag!"
+                  exit 1
+                fi
+                if grep -q "<body" index.html; then
+                  echo "<body> tag found!"
+                else
+                  echo "Missing <body> tag!"
+                  exit 1
+                fi
+                echo ""
+                echo "All validations passed!"
