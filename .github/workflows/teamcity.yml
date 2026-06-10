@@ -5,12 +5,10 @@ on:
   push:
     branches:
       - main
-
 env:
   APP_ENV: testing
   name: staging
   VERSION: 1.0.0
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,7 +25,6 @@ jobs:
 
       - name: check
         run: echo "this is build in the teamcity"
-
   test:
     needs: build
     runs-on: ubuntu-latest
