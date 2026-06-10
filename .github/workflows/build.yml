@@ -1,0 +1,17 @@
+name: build
+on:
+  push:
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get code
+        uses: actions/checkout@v3
+      - name: check html file
+        run: |
+          echo "build started"
+          ls -la
+          echo "index.html found"
+          cat index.html
+      - name: check
+        run: echo "this is build in the teamcity"
